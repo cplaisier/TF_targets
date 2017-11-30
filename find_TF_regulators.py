@@ -16,6 +16,7 @@
 
 from optparse import OptionParser
 import sys
+import gzip
 
 parser = OptionParser()
 usage = "usage: %prog --input FILE --output FILE"
@@ -82,7 +83,7 @@ with open('libs/tfFamilies.csv','r') as inFile:
 # Load up the TF target genes
 allGenes = set()
 tfTargets = {}
-with open('libs/tfbsDb_plus_and_minus_5000_entrez.json','r') as inFile:
+with gzip.open('libs/tfbsDb_plus_and_minus_5000_entrez.json.gz','rb') as inFile:
     tfTargets = json.load(inFile)
 allGenes = set([item for sublist in tfTargets.values() for item in sublist])
 
