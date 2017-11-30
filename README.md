@@ -1,10 +1,11 @@
 # TF_targets
 Script to find TF regulators for a given input gene file.
 
-# Dependencies
-Requires Python 2.7 and SciPy. Both of which can be installed using Anaconda(https://www.anaconda.com/download/).
+## Dependencies
+Requires Python 2.7 and SciPy. Both of which can be installed using Anaconda (https://www.anaconda.com/download/).
 
-# Running program
+## Running program
+```
 Usage: find_TF_regulators.py --input FILE --output FILE
 
 Options:
@@ -13,16 +14,18 @@ Options:
                         input gene list (symbols)
   -o FILE, --output=FILE
                         file to dump output
+```
 
-# Input file
+## Input file
 Text file with gene symbols on each line:
-
+```
 Gene1
 Gene2
 Gene3
 ...
+```
 
-# Output file
+## Output file
 A comma separated values (CSV) file with the following columns:
 
 TF - Motif name (specified by database)
@@ -36,6 +39,7 @@ Mapped Input Gene List - Number of input gene list symbols that were mapped to E
 TF Targets - Number of TF target genes
 P-Value - Hypergeometric CDF for enrichment of input gene list with TF target genes
 
-# Example run
+## Example run
+```
 python find_TF_regulators.py --input=input.txt --output=out.csv
-
+```
