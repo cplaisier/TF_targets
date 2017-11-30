@@ -1,5 +1,5 @@
 # TF_targets
-Script to find TF regulators for a given input gene file.
+Script to find TF regulators for a given input gene file. Current libraries in 'libs' are designed for human gene sets. Could be made to work on mouse as well. Please contact me if that is helpful.
 
 ## Dependencies
 Requires Python 2.7 and SciPy. Both of which can be installed using Anaconda (https://www.anaconda.com/download/).
