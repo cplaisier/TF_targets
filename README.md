@@ -1,12 +1,12 @@
 # TF_targets
-Script to find TF regulators for a given input gene file. Current libraries in 'libs' are designed for human gene sets. Could be made to work on mouse as well. Please contact me if that is helpful.
+Script to find TF regulators for a given input gene file. Current libraries in 'libs' are designed for human and mouse gene sets. Please contact me if that is helpful.
 
 ## Dependencies
-Requires Python 2.7 and SciPy. Both of which can be installed using Anaconda (https://www.anaconda.com/download/).
+Requires Python >= 2.7 and SciPy. Both of which can be installed using Anaconda (https://www.anaconda.com/download/).
 
 ## Running program
 ```
-Usage: find_TF_regulators.py --input FILE --output FILE
+Usage: find_TF_regulators.py --input FILE --output FILE --species SPECIES
 
 Options:
   -h, --help            show this help message and exit
@@ -14,6 +14,8 @@ Options:
                         input gene list (symbols)
   -o FILE, --output=FILE
                         file to dump output
+  -s STRING, --species=STRING
+                        species of interest from {human, mouse}, default = human
 ```
 
 ## Input file
@@ -41,5 +43,5 @@ A comma separated values (CSV) file with the following columns:
 
 ## Example run
 ```
-python find_TF_regulators.py --input=input.txt --output=out.csv
+python find_TF_regulators.py --input=input.txt --output=out.csv --species=human
 ```
