@@ -19,12 +19,15 @@ import sys
 import gzip
 
 parser = OptionParser()
-usage = "usage: %prog --input FILE --output FILE"
+usage = "usage: %prog --input FILE --output FILE --species SPECIES"
 parser = OptionParser(usage=usage)
 parser.add_option('-i', '--input', dest='input',
                   help='input gene list (symbols)', metavar='FILE')
 parser.add_option('-o', '--output', dest='output',
                   help='file to dump output', metavar='FILE')
+parser.add_option('-s', '--species', dest='species',
+                  default = 'human', action="store", type="string",
+                  help='choosing the species from {human, mouse}', metavar='SPECIES')
 
 (options, args) = parser.parse_args()
 
@@ -34,6 +37,7 @@ if not options.input or not options.output:
 
 from scipy.stats import hypergeom
 import json
+import pandas as pd
 
 def enrichment(geneList1, geneList2, allGenes):
     tmp = set(geneList1).intersection(geneList2)
@@ -46,7 +50,7 @@ def enrichment(geneList1, geneList2, allGenes):
 # Read in gene symbol conversion to Entrez IDs
 symbol2entrezId = {}
 entrezId2symbol ={}
-with open('libs/mart_export.txt','r') as inFile:
+with open(f'libs/{options.species}/mart_export.txt','r') as inFile:
     inFile.readline() # Get rid of header
     while 1:
         line = inFile.readline()
@@ -56,10 +60,10 @@ with open('libs/mart_export.txt','r') as inFile:
         if len(splitUp)==3 and not (splitUp[1]=='' or splitUp[2]==''):
             symbol2entrezId[splitUp[1]] = splitUp[2]
             entrezId2symbol[splitUp[2]] = splitUp[1]
-
+            
 # Read in humanTFs_All.csv with <TF Name>,<Entrez ID>
 tfName2entrezId = {}
-with open('libs/humanTFs_All.csv','r') as inFile:
+with open(f'libs/{options.species}/TFs_All.csv','r') as inFile:
     inFile.readline() # Get rid of header
     while 1:
         line = inFile.readline()
@@ -70,7 +74,7 @@ with open('libs/humanTFs_All.csv','r') as inFile:
 
 # Read in tfFamilies.csv for expanded list of possible TFs
 tfFamilies = {}
-with open('libs/tfFamilies.csv','r') as inFile:
+with open(f'libs/{options.species}/tfFamilies.csv','r') as inFile:
     inFile.readline() # Get rid of header
     while 1:
         line = inFile.readline()
@@ -83,7 +87,7 @@ with open('libs/tfFamilies.csv','r') as inFile:
 # Load up the TF target genes
 allGenes = set()
 tfTargets = {}
-with gzip.open('libs/tfbsDb_plus_and_minus_5000_entrez.json.gz','rb') as inFile:
+with gzip.open(f'libs/{options.species}/tfbsDb_plus_and_minus_5000_entrez.json.gz','rb') as inFile:
     tfTargets = json.load(inFile)
 allGenes = set([item for sublist in tfTargets.values() for item in sublist])
 
@@ -109,4 +113,3 @@ for tf1 in tfTargets:
     output.append(','.join([tf1, tfName, tfFam, posNames, str(res1[0]), ' '.join([entrezId2symbol[i] for i in res1[1] if i in entrezId2symbol]), str(res1[2]), str(res1[3]), str(res1[4]), str(res1[5])]))
 with open(options.output,'w') as outFile:
     outFile.write('\n'.join(output))
-
